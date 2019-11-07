@@ -1,0 +1,28 @@
+{
+  "name": "node-typescript",
+  "version": "1.0.0",
+  "description": "Node TypeScript sample project",
+  "main": "server.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "tsc && mocha tests.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Microsoft/azure-pipelines-canary.git"
+  },
+  "author": "Microsoft",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Microsoft/azure-pipelines-canary/issues"
+  },
+  "homepage": "https://github.com/Microsoft/azure-pipelines-canary#readme",
+  "devDependencies": {
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.12.0",
+    "mocha": "^5.2.0",
+    "mocha-junit-reporter": "^1.23.1",
+    "typescript": "^2.9.2"
+  },
+  "dependencies": {}
+}

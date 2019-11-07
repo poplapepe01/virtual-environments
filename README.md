@@ -1,37 +1,42 @@
-# GitHub Actions Virtual Environments
-This repository will contain the code that we use to create the GitHub Actions [virtual environments](https://help.github.com/en/articles/software-in-virtual-environments-for-github-actions).
-We're not quite ready to share the code and accept contributions yet. However, we want to gather your software requests and bug reports.
-Please use the issue templates to submit requests and bug reports related to the installed software.
+# canary-sandbox
+Area to play with canary tests
 
-If you need help with how to set up your workflow file or use a specific tool, 
-check out the [GitHub Actions Community Forum](https://github.community/t5/GitHub-Actions/bd-p/actions).
+## GitHub Actions Canary (migrated from [azure-pipelines-canary](https://github.com/microsoft/azure-pipelines-canary))
+This repository is a suite of GitHub Actions workflows built to validate new hosted image releases from [virtual-environments](https://github.com/actions/virutal-environments).  
 
-## OS's offered
-We currently offer Linux, macOS, and Windows virtual environments:
+The workflows that make up the suite of tests are located here: [.github/workflows](.github/workflows)
 
-- **Linux**. We offer Ubuntu 16.04 and Ubuntu 18.04. We do not plan to offer other Linux distributions. If you want to build using other distributions with the hosted virtual environments, we suggest you use Docker. Alternatively, you can host your own VMs and make use of self-hosted runners which will be available when GitHub Actions becomes generally available on November 13, 2019. 
-- **macOS**. We offer macOS Catalina 10.15.
-- **Windows**. We offer Windows Server 2016 and Windows Server 2019. However, we plan to offer only Windows Server 2019 starting on November 7, 2019. We plan to add Visual Studio 2017 to the Windows Server 2019 virtual environment, but do not yet have a firm ETA.
+Only workflows listed in [enabledWorkflows.json](enabledWorkflows.json) will be run as part of the hosted image validation.
 
-## Guidelines for what's installed
-We follow these rough guidelines when deciding what to pre-install:
 
-- Tools and ecosystems that are more popular and widely-used will be given priority.
-- More recent versions of tools will be given priority over older versions.
-- Tools and versions that are deprecated or have reached end-of-life will not be added.
-- Tools and versions will be removed 6 months after they are deprecated or have reached end-of-life.
-- If a tool can be installed during the build, we will evaluate how much time is saved
-and how much space is used by having the tool pre-installed.
+| Workflows status (master only) |
+| --- |
+| ![](https://github.com/bbq-beets/canary-sandbox/workflows/Ruby%20Gems%20Tests/badge.svg) |
+| ![](https://github.com/bbq-beets/canary-sandbox/workflows/Ant%20Actions%20Workflow%20Tests/badge.svg) |
+| ![](https://github.com/bbq-beets/canary-sandbox/workflows/Node%20Actions%20Workflow%20Tests/badge.svg) |
+| ![](https://github.com/bbq-beets/canary-sandbox/workflows/dotNet%20Tests/badge.svg) |
+| ![](https://github.com/bbq-beets/canary-sandbox/workflows/Haskell%20GHC%20Tests/badge.svg) |
 
-## Updates to the virtual environments
-_Cadence_
+### Adding new tests
 
-You can expect approximately weekly updates to the software on the virtual environments.
-For some tools, we always install the latest at the time of the deployment; for others,
-we pin the tool to specific version(s).
+To execute the tests locally you will need to create a PAT for this repository then:
+- run `npm install`
+- run `node actions-canary-runner.js --token <your GitHub token>`
 
-_Notifications_
+Add a new workflow for the software package you want to test (e.g. ruby or ant)
+Refer to the [ant.yml](.github/workflows/ant.yml) for an example
 
-Right now, we don't have a great way for you to know when updates to the images are coming.
-When we have the code available here, you can watch the Releases for when we generate
-candidate environments, and when we deploy new ones.
+The trigger for the workflow needs to look similar to this in order to be picked up by the test suite. If the workflow is listed in [enabledWorkflows.json](enabledWorkflows.json), `actions-canary-runner.js` will automatically create a commit with a matching `testRun` file to trigger the workflow.  Additionally, having a trigger for pushes to master sets the badge status for the workflow.
+
+Example:
+```
+on:
+  push:
+    branches:
+      - 'master'
+      - 'testrun/**'
+    paths:
+      - '.github/workflows/<the yaml file name>.yml'
+      - 'testRun_<this value needs to match the entry in enabledWorkflows.json>'
+```
+Add an entry to [enabledWorkflows.json](enabledWorkflows.json) to add your workflow to the test suite.

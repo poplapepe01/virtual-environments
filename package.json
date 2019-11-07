@@ -1,0 +1,26 @@
+{
+  "name": "canary-sandbox",
+  "version": "1.0.0",
+  "description": "playing with canary tests setup",
+  "main": "actions-canary-runner.js",
+  "dependencies": {
+    "@octokit/rest": "^16.28.9",
+    "simple-git": "^1.126.0",
+    "uuid": "^3.3.3",
+    "yargs": "^14.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bbq-beets/canary-sandbox.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bbq-beets/canary-sandbox/issues"
+  },
+  "homepage": "https://github.com/bbq-beets/canary-sandbox#readme"
+}

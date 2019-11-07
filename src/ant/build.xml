@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<project name="junitsuiteexample" default="testsuite">
+  <property name="project.name" value="junitsuiteexample" />
+  <property name="src.dir" value="src" />
+  <property name="lib.dir" value="lib" />
+  <property name="target.dir" value="target" />
+  <property name="classes.dir" value="${target.dir}/classes" />
+  <property name="junit.out.dir.xml" value="${target.dir}/report/junit/xml" />
+  <property name="junit.out.dir.html" value="${target.dir}/report/junit/html" />
+  <echo>Cleaning classes dir...</echo>
+  <target name="clean" description="Delete earlier classes">
+    <delete dir="${target.dir}" quiet="yes" />
+  </target>
+  <echo>Make required directories...</echo>
+  <target name="makedir" depends="clean" description="Create required directories">
+    <mkdir dir="${classes.dir}" />
+  </target>
+  <echo>Compile</echo>
+  <target name="compile" depends="makedir" description="Compile java code.">
+    <javac debug="true" destdir="${classes.dir}">
+      <src path="${src.dir}" />
+      <classpath>
+        <fileset dir="${lib.dir}" includes="**/*.jar" />
+      </classpath>
+    </javac>
+  </target>
+  <target name="jar" depends="compile">
+    <mkdir dir="${target.dir}/jar" />
+    <jar destfile="${target.dir}/jar/HelloWorld.jar" basedir="${target.dir}/classes">
+      <manifest>
+        <attribute name="AllTests" value="tests" />
+        <attribute name="ExampleTests" value="tests" />
+      </manifest>
+    </jar>
+  </target>
+  <path id="classpath.test">
+    <path path="${java.class.path}" />
+    <pathelement location="${classes.dir}" />
+    <fileset dir="${lib.dir}" includes="**/*.jar" />
+    <path location="${classes.dir}" />
+  </path>
+  <echo>Running junit test suite...</echo>
+  <target name="testsuite" depends="compile" description="Running Test Suite">
+    <delete dir="${junit.out.dir.xml}" />
+    <mkdir dir="${junit.out.dir.xml}" />
+      <junit printsummary="yes" haltonfailure="no" fork="true" maxmemory="512m">
+        <classpath refid="classpath.test" />
+        <sysproperty key="ant.home" value="${ant.home}" />
+        <formatter type="xml" />
+        <batchtest fork="yes" todir="${junit.out.dir.xml}">
+          <fileset dir="${classes.dir}" includes="**/AllTests.class" />
+          <fileset dir="${classes.dir}" includes="**/ExampleTest.class" />
+          <!-- <zipfileset src="${target.dir}/jar/HelloWorld.jar" includes="**/*.class"/> -->
+        </batchtest>
+      </junit>
+  </target> 
+</project>

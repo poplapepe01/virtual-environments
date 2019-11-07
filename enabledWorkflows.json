@@ -1,0 +1,10 @@
+{
+  "enabled": [
+    "ruby",
+    "ant",
+    "node",
+    "dotNet",
+    "haskell",
+    "python"
+  ]
+}
